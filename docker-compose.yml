@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: ./compose/local/django/Dockerfile
     image: django_celery_web
-    command: start
+    command: /start
     volumes:
       - .:/app
     ports:
@@ -73,5 +73,5 @@ services:
       - redis
       - db
 
-  volumes:
-    postgres_data:
+volumes:
+  postgres_data:

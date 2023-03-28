@@ -250,6 +250,14 @@ python-versions = ">=3.7.0"
 wcwidth = "*"
 
 [[package]]
+name = "psycopg-binary"
+version = "3.1.8"
+description = "PostgreSQL database adapter for Python -- C optimisation distribution"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[[package]]
 name = "pytz"
 version = "2023.2"
 description = "World timezone definitions, modern and historical"
@@ -323,7 +331,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "7e6cd301472edc21f901f9b0a4f5615d1419f3ef58438b825493c6ab93446cde"
+content-hash = "0d58ed6a9c01f334cc7657aa649d40c8e23cc021bf5ef6dbc56f6000d78603f2"
 
 [metadata.files]
 amqp = []
@@ -363,6 +371,7 @@ humanize = []
 kombu = []
 prometheus-client = []
 prompt-toolkit = []
+psycopg-binary = []
 pytz = []
 redis = []
 six = [
