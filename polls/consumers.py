@@ -35,11 +35,7 @@ def notify_channel_layer(task_id):
 
     https://channels.readthedocs.io/en/stable/topics/channel_layers.html#using-outside-of-consumers
     """
-    print(5)
     channel_layer = get_channel_layer()
-
-    print(channel_layer)
-
     async_to_sync(channel_layer.group_send)(
         task_id,
         {'type': 'update_task_status', 'data': get_task_info(task_id)}
