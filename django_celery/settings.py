@@ -143,10 +143,29 @@ CELERY_TASK_CREATE_MISSING_QUEUES = False
 CELERY_TASK_QUEUES = (
     # need to define default queue here or exception would be raised
     Queue('default'),
-
     Queue('high_priority'),
     Queue('low_priority'),
 )
+
+# manual task routing
+
+# CELERY_TASK_ROUTES = {
+#     'django_celery.celery.*': {
+#         'queue': 'low_priority',
+#     },
+#     'polls.tasks.*': {
+#         'queue': 'high_priority',
+#     },
+# }
+
+# dynamic task routing
+def route_task(name, args, kwargs, options, task=None, **kw):
+    if ':' in name:
+        queue, _ = name.split(':')
+        return {'queue': queue}
+    return {'queue': 'default'}
+
+CELERY_TASK_ROUTES = (route_task,)
 
 CELERY_BEAT_SCHEDULE = {
     # 'task_clear_session': {
