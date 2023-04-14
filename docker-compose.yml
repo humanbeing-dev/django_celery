@@ -35,6 +35,11 @@ services:
       dockerfile: ./compose/local/django/Dockerfile
     image: django_celery_celery_worker
     command: /start-celeryworker_1
+    logging:
+      driver: syslog
+      options:
+        syslog-address: "tcp+tls://logs2.papertrailapp.com:20444"
+        tag: "{{.Name}}/{{.ID}}"
     volumes:
       - .:/app
     env_file:

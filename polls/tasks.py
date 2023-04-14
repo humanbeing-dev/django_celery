@@ -20,9 +20,8 @@ def sample_task(email):
 
 
 class BaseTaskWithRetry(Task):
-
     autoretry_for = (Exception, KeyError)
-    retry_kwargs = {'max_retries': 5}
+    retry_kwargs = {"max_retries": 5}
     retry_backoff = True
 
 
@@ -40,27 +39,34 @@ def task_postrun_handler(task_id, **kwargs):
     notify_channel_layer(task_id)
 
 
-@shared_task(name='task_clear_session')
+@shared_task(name="task_clear_session")
 def task_clear_session():
     from django.core.management import call_command
-    call_command('clearsessions')
+
+    call_command("clearsessions")
 
 
-@shared_task(name='default:dynamic_example_one')
+@shared_task(name="default:dynamic_example_one")
 def dynamic_example_one():
-    logger.info('Example One')
+    logger.info("Example One")
 
 
-@shared_task(name='low_priority:dynamic_example_two')
+@shared_task(name="low_priority:dynamic_example_two")
 def dynamic_example_two():
-    logger.info('Example Two')
+    logger.info("Example Two")
 
 
-@shared_task(name='high_priority:dynamic_example_three')
+@shared_task(name="high_priority:dynamic_example_three")
 def dynamic_example_three():
-    logger.info('Example Three')
+    logger.info("Example Three")
+
 
 @shared_task()
 def task_send_welcome_email(user_pk):
     user = User.objects.get(pk=user_pk)
-    logger.info(f'send email to {user.email} {user.pk}')
+    logger.info(f"send email to {user.email} {user.pk}")
+
+
+@shared_task()
+def task_test_logger():
+    logger.info("test")
