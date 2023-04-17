@@ -7,13 +7,18 @@ import requests
 from celery.result import AsyncResult
 from django.contrib.auth.models import User
 from django.db import transaction
-from django.http import JsonResponse, HttpResponse                   
+from django.http import JsonResponse, HttpResponse, HttpResponseRedirect                   
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from string import ascii_lowercase
 
 from polls.forms import YourForm
-from polls.tasks import sample_task, task_process_notification, task_send_welcome_email
+from polls.tasks import (
+    sample_task, 
+    task_process_notification, 
+    task_send_welcome_email, 
+    task_add_subscribe
+)
 
 
 logger = logging.getLogger(__name__)
@@ -135,3 +140,26 @@ def transaction_celery(request):
     time.sleep(1)
 
     return HttpResponse('test')
+
+
+@transaction.atomic
+def user_subscribe(request):
+    """
+    This Django view saves user info to the db and sends task to Celery worker
+    to subscribe the user to the database
+    """
+    if request.method == 'POST':
+        form = YourForm(request.POST)
+        if form.is_valid():
+            instance, flag = User.objects.get_or_create(
+                username=form.cleaned_data['username'],
+                email=form.cleaned_data['email'],
+            )
+            transaction.on_commit(
+                lambda: task_add_subscribe.delay(instance.pk)
+            )
+            return HttpResponseRedirect('')
+    else:
+        form = YourForm()
+
+    return render(request, 'user_subscribe.html', {'form': form})
